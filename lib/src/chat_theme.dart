@@ -60,6 +60,7 @@ abstract class ChatTheme {
     required this.errorIcon,
     required this.inputBackgroundColor,
     required this.inputBorderRadius,
+    required this.inputBoxDecoration,
     required this.inputPadding,
     required this.inputTextColor,
     this.inputTextCursorColor,
@@ -86,6 +87,8 @@ abstract class ChatTheme {
     required this.sentMessageLinkDescriptionTextStyle,
     required this.sentMessageLinkTitleTextStyle,
     required this.statusIconPadding,
+    required this.timeAnnotationMargin,
+    required this.timeAnnotationTextStyle,
     required this.userAvatarImageBackgroundColor,
     required this.userAvatarNameColors,
     required this.userAvatarTextStyle,
@@ -124,6 +127,9 @@ abstract class ChatTheme {
 
   /// Top border radius of the bottom bar where text field is
   final BorderRadius inputBorderRadius;
+
+  /// Box decoration of the bottom bar where text field is
+  final BoxDecoration? inputBoxDecoration;
 
   /// Insets of the bottom bar where text field is
   final EdgeInsetsGeometry inputPadding;
@@ -210,6 +216,12 @@ abstract class ChatTheme {
   /// Padding around status icons
   final EdgeInsetsGeometry statusIconPadding;
 
+  /// Margin around time annotation
+  final EdgeInsetsGeometry timeAnnotationMargin;
+
+  /// Text style for time annotation
+  final TextStyle timeAnnotationTextStyle;
+
   /// Color used as a background for user avatar if an image is provided.
   /// Visible if the image has some transparent parts.
   final Color userAvatarImageBackgroundColor;
@@ -260,6 +272,7 @@ class DefaultChatTheme extends ChatTheme {
     BorderRadius inputBorderRadius = const BorderRadius.vertical(
       top: Radius.circular(20),
     ),
+    BoxDecoration? inputBoxDecoration,
     EdgeInsetsGeometry inputPadding = EdgeInsets.zero,
     Color inputTextColor = neutral7,
     Color? inputTextCursorColor,
@@ -335,6 +348,18 @@ class DefaultChatTheme extends ChatTheme {
     ),
     EdgeInsetsGeometry statusIconPadding =
         const EdgeInsets.symmetric(horizontal: 4),
+    EdgeInsetsGeometry timeAnnotationMargin = const EdgeInsets.only(
+      bottom: 4,
+      top: 0,
+      left: 20,
+      right: 20,
+    ),
+    TextStyle timeAnnotationTextStyle = const TextStyle(
+      color: neutral2,
+      fontSize: 12,
+      fontWeight: FontWeight.w800,
+      height: 1.333,
+    ),
     Color userAvatarImageBackgroundColor = Colors.transparent,
     List<Color> userAvatarNameColors = colors,
     TextStyle userAvatarTextStyle = const TextStyle(
@@ -360,6 +385,7 @@ class DefaultChatTheme extends ChatTheme {
           errorIcon: errorIcon,
           inputBackgroundColor: inputBackgroundColor,
           inputBorderRadius: inputBorderRadius,
+          inputBoxDecoration: inputBoxDecoration,
           inputPadding: inputPadding,
           inputTextColor: inputTextColor,
           inputTextCursorColor: inputTextCursorColor,
@@ -388,6 +414,8 @@ class DefaultChatTheme extends ChatTheme {
               sentMessageLinkDescriptionTextStyle,
           sentMessageLinkTitleTextStyle: sentMessageLinkTitleTextStyle,
           statusIconPadding: statusIconPadding,
+          timeAnnotationMargin: timeAnnotationMargin,
+          timeAnnotationTextStyle: timeAnnotationTextStyle,
           userAvatarImageBackgroundColor: userAvatarImageBackgroundColor,
           userAvatarNameColors: userAvatarNameColors,
           userAvatarTextStyle: userAvatarTextStyle,
@@ -428,6 +456,7 @@ class DarkChatTheme extends ChatTheme {
     BorderRadius inputBorderRadius = const BorderRadius.vertical(
       top: Radius.circular(20),
     ),
+    BoxDecoration? inputBoxDecoration,
     EdgeInsetsGeometry inputPadding = EdgeInsets.zero,
     Color inputTextColor = neutral7,
     Color? inputTextCursorColor,
@@ -503,6 +532,16 @@ class DarkChatTheme extends ChatTheme {
     ),
     EdgeInsetsGeometry statusIconPadding =
         const EdgeInsets.symmetric(horizontal: 4),
+    EdgeInsetsGeometry timeAnnotationMargin = const EdgeInsets.only(
+      bottom: 32,
+      top: 16,
+    ),
+    TextStyle timeAnnotationTextStyle = const TextStyle(
+      color: neutral2,
+      fontSize: 12,
+      fontWeight: FontWeight.w800,
+      height: 1.333,
+    ),
     Color userAvatarImageBackgroundColor = Colors.transparent,
     List<Color> userAvatarNameColors = colors,
     TextStyle userAvatarTextStyle = const TextStyle(
@@ -528,6 +567,7 @@ class DarkChatTheme extends ChatTheme {
           errorIcon: errorIcon,
           inputBackgroundColor: inputBackgroundColor,
           inputBorderRadius: inputBorderRadius,
+          inputBoxDecoration: inputBoxDecoration,
           messageInsetsHorizontal: messageInsetsHorizontal,
           messageInsetsVertical: messageInsetsVertical,
           inputPadding: inputPadding,
@@ -556,6 +596,8 @@ class DarkChatTheme extends ChatTheme {
               sentMessageLinkDescriptionTextStyle,
           sentMessageLinkTitleTextStyle: sentMessageLinkTitleTextStyle,
           statusIconPadding: statusIconPadding,
+          timeAnnotationMargin: timeAnnotationMargin,
+          timeAnnotationTextStyle: timeAnnotationTextStyle,
           userAvatarImageBackgroundColor: userAvatarImageBackgroundColor,
           userAvatarNameColors: userAvatarNameColors,
           userAvatarTextStyle: userAvatarTextStyle,

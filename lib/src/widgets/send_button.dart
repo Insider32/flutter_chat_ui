@@ -11,7 +11,7 @@ class SendButton extends StatelessWidget {
   }) : super(key: key);
 
   /// Callback for send button tap event
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SendButton extends StatelessWidget {
             ? InheritedChatTheme.of(context).theme.sendButtonIcon!
             : Image.asset(
                 'assets/icon-send.png',
-                color: InheritedChatTheme.of(context).theme.inputTextColor,
+                color: Theme.of(context).colorScheme.primary,
                 package: 'flutter_chat_ui',
               ),
         onPressed: onPressed,

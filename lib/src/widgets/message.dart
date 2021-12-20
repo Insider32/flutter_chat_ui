@@ -19,6 +19,7 @@ class Message extends StatelessWidget {
     this.customMessageBuilder,
     required this.emojiEnlargementBehavior,
     this.fileMessageBuilder,
+    required this.firstInGroup,
     required this.hideBackgroundOnEmojiMessages,
     this.imageMessageBuilder,
     required this.message,
@@ -46,6 +47,7 @@ class Message extends StatelessWidget {
   final Widget Function(
     Widget child, {
     required types.Message message,
+    required bool firstInGroup,
     required bool nextMessageInGroup,
   })? bubbleBuilder;
 
@@ -61,6 +63,8 @@ class Message extends StatelessWidget {
   /// Build a file message inside predefined bubble
   final Widget Function(types.FileMessage, {required int messageWidth})?
       fileMessageBuilder;
+
+  final bool firstInGroup;
 
   /// Hide background for messages containing only emojis.
   final bool hideBackgroundOnEmojiMessages;
@@ -165,6 +169,7 @@ class Message extends StatelessWidget {
         ? bubbleBuilder!(
             _messageBuilder(),
             message: message,
+            firstInGroup: firstInGroup,
             nextMessageInGroup: roundBorder,
           )
         : enlargeEmojis && hideBackgroundOnEmojiMessages
@@ -300,6 +305,7 @@ class Message extends StatelessWidget {
       margin: const EdgeInsets.only(
         bottom: 4,
         left: 20,
+        right: 20,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -326,17 +332,14 @@ class Message extends StatelessWidget {
               ],
             ),
           ),
-          if (_currentUserIsAuthor)
+          if (_currentUserIsAuthor && showStatus)
             Padding(
               padding: InheritedChatTheme.of(context).theme.statusIconPadding,
-              child: showStatus
-                  ? GestureDetector(
-                      onLongPress: () =>
-                          onMessageStatusLongPress?.call(message),
-                      onTap: () => onMessageStatusTap?.call(message),
-                      child: _statusBuilder(context),
-                    )
-                  : null,
+              child: GestureDetector(
+                onLongPress: () => onMessageStatusLongPress?.call(message),
+                onTap: () => onMessageStatusTap?.call(message),
+                child: _statusBuilder(context),
+              ),
             ),
         ],
       ),

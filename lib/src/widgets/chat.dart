@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_chat_ui/src/models/time_annotation.dart';
 import 'package:flutter_chat_ui/src/widgets/inherited_l10n.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -58,10 +59,12 @@ class Chat extends StatefulWidget {
     this.onTextFieldTap,
     this.scrollPhysics,
     this.sendButtonVisibilityMode = SendButtonVisibilityMode.editing,
+    this.sendButtonAlwaysVisible = false,
     this.showUserAvatars = false,
     this.showUserNames = false,
     this.textMessageBuilder,
     this.theme = const DefaultChatTheme(),
+    this.timeAnnotationFormat,
     this.timeFormat,
     this.usePreviewData = true,
     required this.user,
@@ -71,6 +74,7 @@ class Chat extends StatefulWidget {
   final Widget Function(
     Widget child, {
     required types.Message message,
+    required bool firstInGroup,
     required bool nextMessageInGroup,
   })? bubbleBuilder;
 
@@ -196,6 +200,9 @@ class Chat extends StatefulWidget {
   /// See [Input.sendButtonVisibilityMode]
   final SendButtonVisibilityMode sendButtonVisibilityMode;
 
+  /// Bypass send button visibility
+  final bool sendButtonAlwaysVisible;
+
   /// See [Message.showUserAvatars]
   final bool showUserAvatars;
 
@@ -214,6 +221,8 @@ class Chat extends StatefulWidget {
   /// existing one, like the [DefaultChatTheme]. You can customize only certain
   /// properties, see more here [DefaultChatTheme].
   final ChatTheme theme;
+
+  final DateFormat? timeAnnotationFormat;
 
   /// Allows you to customize the time format. IMPORTANT: only for the time,
   /// do not return date here. See [dateFormat] to customize the date format.
@@ -260,6 +269,7 @@ class _ChatState extends State<Chat> {
         dateLocale: widget.dateLocale,
         groupMessagesThreshold: widget.groupMessagesThreshold,
         showUserNames: widget.showUserNames,
+        timeAnnotationFormat: widget.timeAnnotationFormat,
         timeFormat: widget.timeFormat,
       );
 
@@ -342,6 +352,16 @@ class _ChatState extends State<Chat> {
           style: widget.theme.dateDividerTextStyle,
         ),
       );
+    } else if (object is TimeAnnotation) {
+      return Container(
+        alignment:
+            object.isCurrentUser ? Alignment.topRight : Alignment.topLeft,
+        margin: widget.theme.timeAnnotationMargin,
+        child: Text(
+          object.text,
+          style: widget.theme.timeAnnotationTextStyle,
+        ),
+      );
     } else if (object is MessageSpacer) {
       return SizedBox(
         height: object.height,
@@ -360,6 +380,7 @@ class _ChatState extends State<Chat> {
         customMessageBuilder: widget.customMessageBuilder,
         emojiEnlargementBehavior: widget.emojiEnlargementBehavior,
         fileMessageBuilder: widget.fileMessageBuilder,
+        firstInGroup: map['firstInGroup'] == true,
         hideBackgroundOnEmojiMessages: widget.hideBackgroundOnEmojiMessages,
         imageMessageBuilder: widget.imageMessageBuilder,
         message: message,
@@ -465,6 +486,8 @@ class _ChatState extends State<Chat> {
                           onTextFieldTap: widget.onTextFieldTap,
                           sendButtonVisibilityMode:
                               widget.sendButtonVisibilityMode,
+                          sendButtonAlwaysVisible:
+                              widget.sendButtonAlwaysVisible,
                         ),
                   ],
                 ),

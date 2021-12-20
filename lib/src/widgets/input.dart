@@ -27,6 +27,7 @@ class Input extends StatefulWidget {
     this.onTextChanged,
     this.onTextFieldTap,
     required this.sendButtonVisibilityMode,
+    required this.sendButtonAlwaysVisible,
   }) : super(key: key);
 
   /// See [AttachmentButton.onPressed]
@@ -52,6 +53,8 @@ class Input extends StatefulWidget {
   /// [TextField] state inside the [Input] widget.
   /// Defaults to [SendButtonVisibilityMode.editing].
   final SendButtonVisibilityMode sendButtonVisibilityMode;
+
+  final bool sendButtonAlwaysVisible;
 
   @override
   _InputState createState() => _InputState();
@@ -163,6 +166,8 @@ class _InputState extends State<Input> {
                     24 + _query.padding.right,
                     20 + _query.viewInsets.bottom + _query.padding.bottom,
                   ),
+                  decoration:
+                      InheritedChatTheme.of(context).theme.inputBoxDecoration,
                   child: Row(
                     children: [
                       if (widget.onAttachmentPressed != null) _leftWidget(),
@@ -207,9 +212,11 @@ class _InputState extends State<Input> {
                         ),
                       ),
                       Visibility(
-                        visible: _sendButtonVisible,
+                        visible: _sendButtonVisible ||
+                            widget.sendButtonAlwaysVisible,
                         child: SendButton(
-                          onPressed: _handleSendPressed,
+                          onPressed:
+                              _sendButtonVisible ? _handleSendPressed : null,
                         ),
                       ),
                     ],

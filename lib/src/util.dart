@@ -5,8 +5,8 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:intl/intl.dart';
 import './models/date_header.dart';
 import './models/emoji_enlargement_behavior.dart';
-import './models/message_spacer.dart';
 import './models/preview_image.dart';
+import './models/time_annotation.dart';
 
 /// Returns text representation of a provided bytes value (e.g. 1kB, 1GB)
 String formatBytes(int size, [int fractionDigits = 2]) {
@@ -95,6 +95,7 @@ List<Object> calculateChatMessages(
   String? dateLocale,
   required int groupMessagesThreshold,
   required bool showUserNames,
+  DateFormat? timeAnnotationFormat,
   DateFormat? timeFormat,
 }) {
   final chatMessages = <Object>[];
@@ -107,14 +108,19 @@ List<Object> calculateChatMessages(
     final isLast = i == 0;
     final message = messages[i];
     final messageHasCreatedAt = message.createdAt != null;
+
+    final prevMessage = isFirst ? null : messages[i + 1];
+    final prevMessageHasCreatedAt = prevMessage?.createdAt != null;
+    final prevMessageSameAuthor = message.author.id == prevMessage?.author.id;
+    var prevMessageInGroup = false;
+
     final nextMessage = isLast ? null : messages[i - 1];
     final nextMessageHasCreatedAt = nextMessage?.createdAt != null;
     final nextMessageSameAuthor = message.author.id == nextMessage?.author.id;
     final notMyMessage = message.author.id != user.id;
-
-    var nextMessageDateThreshold = false;
     var nextMessageDifferentDay = false;
     var nextMessageInGroup = false;
+
     var showName = false;
 
     if (showUserNames) {
@@ -143,17 +149,21 @@ List<Object> calculateChatMessages(
     }
 
     if (messageHasCreatedAt && nextMessageHasCreatedAt) {
-      nextMessageDateThreshold =
-          nextMessage!.createdAt! - message.createdAt! >= dateHeaderThreshold;
-
       nextMessageDifferentDay =
           DateTime.fromMillisecondsSinceEpoch(message.createdAt!).day !=
-              DateTime.fromMillisecondsSinceEpoch(nextMessage.createdAt!).day;
+              DateTime.fromMillisecondsSinceEpoch(nextMessage!.createdAt!).day;
 
       nextMessageInGroup = nextMessageSameAuthor &&
           nextMessage.createdAt! - message.createdAt! <= groupMessagesThreshold;
     }
 
+    if (messageHasCreatedAt && prevMessageHasCreatedAt) {
+      prevMessageInGroup = prevMessageSameAuthor &&
+          message.createdAt! - prevMessage!.createdAt! <=
+              groupMessagesThreshold;
+    }
+
+    // add date header before first message by default
     if (isFirst && messageHasCreatedAt) {
       chatMessages.insert(
         0,
@@ -174,34 +184,45 @@ List<Object> calculateChatMessages(
 
     chatMessages.insert(0, {
       'message': message,
+      'firstInGroup': !prevMessageInGroup,
       'nextMessageInGroup': nextMessageInGroup,
       'showName': notMyMessage &&
           showUserNames &&
           showName &&
           getUserName(message.author).isNotEmpty,
-      'showStatus': true,
+      'showStatus': false,
     });
 
-    if (!nextMessageInGroup) {
+    // add time annotation if last message in group by author
+    if (message.createdAt != null &&
+        (!nextMessageInGroup || !nextMessageSameAuthor)) {
+      final datetimeInMs =
+          DateTime.fromMillisecondsSinceEpoch(message.createdAt!);
+
+      final formattedTime = timeAnnotationFormat != null
+          ? timeAnnotationFormat.format(datetimeInMs)
+          : DateFormat.Hm(dateLocale).format(datetimeInMs);
+
       chatMessages.insert(
         0,
-        MessageSpacer(
-          height: 12,
-          id: message.id,
+        TimeAnnotation(
+          text: formattedTime,
+          isCurrentUser: !notMyMessage,
         ),
       );
     }
 
-    if (nextMessageDifferentDay || nextMessageDateThreshold) {
+    // add date header if next message in different day
+    if (nextMessage != null && nextMessageDifferentDay) {
       chatMessages.insert(
         0,
         DateHeader(
           text: customDateHeaderText != null
               ? customDateHeaderText(
-                  DateTime.fromMillisecondsSinceEpoch(nextMessage!.createdAt!),
+                  DateTime.fromMillisecondsSinceEpoch(nextMessage.createdAt!),
                 )
               : getVerboseDateTimeRepresentation(
-                  DateTime.fromMillisecondsSinceEpoch(nextMessage!.createdAt!),
+                  DateTime.fromMillisecondsSinceEpoch(nextMessage.createdAt!),
                   dateFormat: dateFormat,
                   dateLocale: dateLocale,
                   timeFormat: timeFormat,

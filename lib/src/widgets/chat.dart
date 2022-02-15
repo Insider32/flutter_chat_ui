@@ -58,6 +58,7 @@ class Chat extends StatefulWidget {
     this.onTextChanged,
     this.onTextFieldTap,
     this.scrollPhysics,
+    this.sendButtonAlignment = Alignment.center,
     this.sendButtonVisibilityMode = SendButtonVisibilityMode.editing,
     this.sendButtonAlwaysVisible = false,
     this.showUserAvatars = false,
@@ -196,6 +197,9 @@ class Chat extends StatefulWidget {
 
   /// See [ChatList.scrollPhysics]
   final ScrollPhysics? scrollPhysics;
+
+  /// See [Input.sendButtonAlignment]
+  final Alignment sendButtonAlignment;
 
   /// See [Input.sendButtonVisibilityMode]
   final SendButtonVisibilityMode sendButtonVisibilityMode;
@@ -484,6 +488,7 @@ class _ChatState extends State<Chat> {
                           onSendPressed: widget.onSendPressed,
                           onTextChanged: widget.onTextChanged,
                           onTextFieldTap: widget.onTextFieldTap,
+                          sendButtonAlignment: widget.sendButtonAlignment,
                           sendButtonVisibilityMode:
                               widget.sendButtonVisibilityMode,
                           sendButtonAlwaysVisible:

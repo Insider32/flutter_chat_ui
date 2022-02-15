@@ -8,14 +8,17 @@ class SendButton extends StatelessWidget {
   const SendButton({
     Key? key,
     required this.onPressed,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   /// Callback for send button tap event
   final void Function()? onPressed;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: alignment,
       height: 24,
       margin: const EdgeInsets.only(left: 16),
       width: 24,

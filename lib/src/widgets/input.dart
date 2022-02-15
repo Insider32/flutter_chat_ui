@@ -26,6 +26,7 @@ class Input extends StatefulWidget {
     required this.onSendPressed,
     this.onTextChanged,
     this.onTextFieldTap,
+    this.sendButtonAlignment = Alignment.center,
     required this.sendButtonVisibilityMode,
     required this.sendButtonAlwaysVisible,
   }) : super(key: key);
@@ -48,6 +49,10 @@ class Input extends StatefulWidget {
 
   /// Will be called on [TextField] tap
   final void Function()? onTextFieldTap;
+
+  /// Controls the alignment of the [SendButton].
+  /// Defaults to [Alignment.center].
+  final Alignment sendButtonAlignment;
 
   /// Controls the visibility behavior of the [SendButton] based on the
   /// [TextField] state inside the [Input] widget.
@@ -168,58 +173,62 @@ class _InputState extends State<Input> {
                   ),
                   decoration:
                       InheritedChatTheme.of(context).theme.inputBoxDecoration,
-                  child: Row(
-                    children: [
-                      if (widget.onAttachmentPressed != null) _leftWidget(),
-                      Expanded(
-                        child: TextField(
-                          controller: _textController,
-                          cursorColor: InheritedChatTheme.of(context)
-                              .theme
-                              .inputTextCursorColor,
-                          decoration: InheritedChatTheme.of(context)
-                              .theme
-                              .inputTextDecoration
-                              .copyWith(
-                                hintStyle: InheritedChatTheme.of(context)
-                                    .theme
-                                    .inputTextStyle
-                                    .copyWith(
-                                      color: InheritedChatTheme.of(context)
-                                          .theme
-                                          .inputTextColor
-                                          .withOpacity(0.5),
-                                    ),
-                                hintText: InheritedL10n.of(context)
-                                    .l10n
-                                    .inputPlaceholder,
-                              ),
-                          focusNode: _inputFocusNode,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 5,
-                          minLines: 1,
-                          onChanged: widget.onTextChanged,
-                          onTap: widget.onTextFieldTap,
-                          style: InheritedChatTheme.of(context)
-                              .theme
-                              .inputTextStyle
-                              .copyWith(
-                                color: InheritedChatTheme.of(context)
-                                    .theme
-                                    .inputTextColor,
-                              ),
-                          textCapitalization: TextCapitalization.sentences,
+                  child: IntrinsicHeight(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (widget.onAttachmentPressed != null) _leftWidget(),
+                        Expanded(
+                          child: TextField(
+                            controller: _textController,
+                            cursorColor: InheritedChatTheme.of(context)
+                                .theme
+                                .inputTextCursorColor,
+                            decoration: InheritedChatTheme.of(context)
+                                .theme
+                                .inputTextDecoration
+                                .copyWith(
+                                  hintStyle: InheritedChatTheme.of(context)
+                                      .theme
+                                      .inputTextStyle
+                                      .copyWith(
+                                        color: InheritedChatTheme.of(context)
+                                            .theme
+                                            .inputTextColor
+                                            .withOpacity(0.5),
+                                      ),
+                                  hintText: InheritedL10n.of(context)
+                                      .l10n
+                                      .inputPlaceholder,
+                                ),
+                            focusNode: _inputFocusNode,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 5,
+                            minLines: 1,
+                            onChanged: widget.onTextChanged,
+                            onTap: widget.onTextFieldTap,
+                            style: InheritedChatTheme.of(context)
+                                .theme
+                                .inputTextStyle
+                                .copyWith(
+                                  color: InheritedChatTheme.of(context)
+                                      .theme
+                                      .inputTextColor,
+                                ),
+                            textCapitalization: TextCapitalization.sentences,
+                          ),
                         ),
-                      ),
-                      Visibility(
-                        visible: _sendButtonVisible ||
-                            widget.sendButtonAlwaysVisible,
-                        child: SendButton(
-                          onPressed:
-                              _sendButtonVisible ? _handleSendPressed : null,
+                        Visibility(
+                          visible: _sendButtonVisible ||
+                              widget.sendButtonAlwaysVisible,
+                          child: SendButton(
+                            alignment: widget.sendButtonAlignment,
+                            onPressed:
+                                _sendButtonVisible ? _handleSendPressed : null,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -62,6 +62,7 @@ abstract class ChatTheme {
     required this.inputBorderRadius,
     required this.inputBoxDecoration,
     required this.inputPadding,
+    required this.inputTextFieldPadding,
     required this.inputTextColor,
     this.inputTextCursorColor,
     required this.inputTextDecoration,
@@ -133,6 +134,9 @@ abstract class ChatTheme {
 
   /// Insets of the bottom bar where text field is
   final EdgeInsetsGeometry inputPadding;
+
+  /// Padding insets for input's textfield
+  final EdgeInsetsGeometry? inputTextFieldPadding;
 
   /// Color of the text field's text and attachment/send buttons
   final Color inputTextColor;
@@ -274,6 +278,7 @@ class DefaultChatTheme extends ChatTheme {
     ),
     BoxDecoration? inputBoxDecoration,
     EdgeInsetsGeometry inputPadding = EdgeInsets.zero,
+    EdgeInsetsGeometry? inputTextFieldPadding,
     Color inputTextColor = neutral7,
     Color? inputTextCursorColor,
     InputDecoration inputTextDecoration = const InputDecoration(
@@ -387,6 +392,7 @@ class DefaultChatTheme extends ChatTheme {
           inputBorderRadius: inputBorderRadius,
           inputBoxDecoration: inputBoxDecoration,
           inputPadding: inputPadding,
+          inputTextFieldPadding: inputTextFieldPadding,
           inputTextColor: inputTextColor,
           inputTextCursorColor: inputTextCursorColor,
           inputTextDecoration: inputTextDecoration,
@@ -458,6 +464,7 @@ class DarkChatTheme extends ChatTheme {
     ),
     BoxDecoration? inputBoxDecoration,
     EdgeInsetsGeometry inputPadding = EdgeInsets.zero,
+    EdgeInsetsGeometry? inputTextFieldPadding,
     Color inputTextColor = neutral7,
     Color? inputTextCursorColor,
     InputDecoration inputTextDecoration = const InputDecoration(
@@ -571,6 +578,7 @@ class DarkChatTheme extends ChatTheme {
           messageInsetsHorizontal: messageInsetsHorizontal,
           messageInsetsVertical: messageInsetsVertical,
           inputPadding: inputPadding,
+          inputTextFieldPadding: inputTextFieldPadding,
           inputTextColor: inputTextColor,
           inputTextCursorColor: inputTextCursorColor,
           inputTextDecoration: inputTextDecoration,

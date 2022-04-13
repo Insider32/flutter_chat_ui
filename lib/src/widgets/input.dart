@@ -165,12 +165,15 @@ class _InputState extends State<Input> {
                 color:
                     InheritedChatTheme.of(context).theme.inputBackgroundColor,
                 child: Container(
-                  padding: EdgeInsets.fromLTRB(
-                    24 + _query.padding.left,
-                    20,
-                    24 + _query.padding.right,
-                    20 + _query.viewInsets.bottom + _query.padding.bottom,
-                  ),
+                  padding: InheritedChatTheme.of(context)
+                          .theme
+                          .inputTextFieldPadding ??
+                      EdgeInsets.fromLTRB(
+                        24 + _query.padding.left,
+                        20,
+                        24 + _query.padding.right,
+                        20 + _query.viewInsets.bottom + _query.padding.bottom,
+                      ),
                   decoration:
                       InheritedChatTheme.of(context).theme.inputBoxDecoration,
                   child: IntrinsicHeight(
